@@ -71,6 +71,9 @@ module Patron
     # What cacert file should this session use to verify SSL certificates?
     attr_accessor :cacert
 
+    # What SSL version should be used
+    attr_accessor :ssl_version
+
     # Does this session ignore Content-Size headers?
     attr_accessor :ignore_content_length
 

@@ -153,6 +153,7 @@ class PatronTestServer
     end
 
     @server = WEBrick::HTTPServer.new(options)
+    @server.ssl_context.ssl_version = :SSLv3 if ssl
 
     @server.mount("/test", TestServlet)
     @server.mount("/testpost", TestPostBodyServlet)

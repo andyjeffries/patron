@@ -341,6 +341,7 @@ static void set_options_from_request(VALUE self, VALUE request) {
   VALUE ignore_content_length = Qnil;
   VALUE insecure              = Qnil;
   VALUE cacert                = Qnil;
+  VALUE ssl_version           = Qnil;
   VALUE buffer_size           = Qnil;
   VALUE action_name           = rb_iv_get(request, "@action");
 
@@ -499,6 +500,18 @@ static void set_options_from_request(VALUE self, VALUE request) {
   cacert = rb_iv_get(request, "@cacert");
   if(!NIL_P(cacert)) {
     curl_easy_setopt(curl, CURLOPT_CAINFO, StringValuePtr(cacert));
+  }
+
+  ssl_version = rb_iv_get(request, "@ssl_version");
+  if(!NIL_P(ssl_version)) {
+    ID ssl_version_symbol = rb_intern(StringValuePtr(ssl_version));
+    if (ssl_version_symbol == rb_intern("SSLv3")) {
+      curl_easy_setopt(curl, CURLOPT_SSLVERSION, 3L);
+    } else if (ssl_version_symbol == rb_intern("SSLv2")) {
+      curl_easy_setopt(curl, CURLOPT_SSLVERSION, 2L);
+    } else if (ssl_version_symbol == rb_intern("TLSv1")) {
+      curl_easy_setopt(curl, CURLOPT_SSLVERSION, 1L);
+    }
   }
 
   buffer_size = rb_iv_get(request, "@buffer_size");

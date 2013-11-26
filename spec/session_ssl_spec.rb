@@ -259,6 +259,20 @@ describe Patron::Session do
     body.request_method.should == "GET"
   end
 
+  it "should fail when SSLv2 is requested (because TestServer only supports SSLv3)" do
+    # lambda {
+      @session.ssl_version = :SSLv2
+      response = @session.get("/test")
+    # }.should raise_error(Patron::Error)
+  end
+
+  it "should work when SSLv3 is requested" do
+    lambda {
+      @session.ssl_version = :SSLv3
+      response = @session.get("/test")
+    }.should_not raise_error(Patron::Error)
+  end
+
   # ------------------------------------------------------------------------
   describe 'when debug is enabled' do
     it 'it should not clobber stderr' do
